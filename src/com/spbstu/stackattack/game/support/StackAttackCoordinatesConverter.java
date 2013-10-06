@@ -87,12 +87,20 @@ public class StackAttackCoordinatesConverter {
         vw = Math.max(w, h);
         vh = Math.min(w, h);
 
-        vCellSize = Math.min(
-                (int)(vw / (StackAttackOptions.FIELD_WIDTH + 2 * StackAttackOptions.FIELD_OFFSET)),
-                (int)(vh / (StackAttackOptions.FIELD_HEIGHT + 2 * StackAttackOptions.FIELD_OFFSET))
-        );
+        vCellSize = determineCellSize(vw, vh);
 
-        vOffsetX = (int)(vw - vCellSize * (StackAttackOptions.FIELD_WIDTH + 2 * StackAttackOptions.FIELD_OFFSET));
+        vOffsetX = (int)(vw - makeUncommentedMagic(vCellSize, StackAttackOptions.FIELD_WIDTH));
+    }
+    
+    private int determineCellSize(final int vw, final int vh) {
+        int
+          magicBasedOnWidth = makeUncommentedMagic(vw, StackAttackOptions.FIELD_WIDTH),
+          magicBasedOnHeight = makeUncommentedMagic(vh, StackAttackOptions.FIELD_HEIGHT);
+        return Math.min(magicBasedOnWidth, magicBasedOnHeight);
+    }
+    
+    private int makeUncommentedMagic(final int base, final int magicSource) {
+      return base / (magicSource + 2 * StackAttackOptions.FIELD_OFFSET);
     }
 
     /**
@@ -103,11 +111,7 @@ public class StackAttackCoordinatesConverter {
      * @return screen coordinates.
      */
     public ScreenCoordinate virtualToScreen(final VirtualCoordinate vc) {
-        if (w > h) {
-            return new ScreenCoordinate(0, 0); /* ToDo */
-        } else {
-            return new ScreenCoordinate(w - vc.y, h - vc.x);
-        }
+        return screen2VirtualConvertSuit<ScreenCoordinate, VirtualCoordinate>(vc);
     }
 
     /**
@@ -118,10 +122,14 @@ public class StackAttackCoordinatesConverter {
      * @return virtual coordinates.
      */
     public VirtualCoordinate screenToVirtual(final ScreenCoordinate sc) {
+      return screen2VirtualConvertSuit<VirtualCoordinate, ScreenCoordinate>(sc);
+    }
+    
+    private<A, B> A screen2VirtualConvertSuit(final B origin) {
         if (w > h) {
-            return new VirtualCoordinate(0, 0); /* ToDo */
+            return new A(0, 0); /* ToDo */
         } else {
-            return new VirtualCoordinate(h - sc.y, w - sc.x);
+            return new A(h - origin.y, w - origin.x);
         }
     }
 
