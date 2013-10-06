@@ -46,7 +46,7 @@ public class DoubleUtils {
 
     public static double round(final double n) {
         double rounded = roundForce(n);
-        if (Math.abs(rounded - n) < EPS)
+        if (equals(rounded, n))
           return rounded;
  
         return n;
@@ -55,7 +55,7 @@ public class DoubleUtils {
     public static double roundForce(final double n) {
         double f = Math.floor(n);
 
-        if (Math.abs(f - n) < EPS)
+        if (equals(f, n))
           return f;
         return f + 1;
    }
