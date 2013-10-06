@@ -89,14 +89,18 @@ public class StackAttackCoordinatesConverter {
 
         vCellSize = determineCellSize(vw, vh);
 
-        vOffsetX = (int)(vw - vCellSize * (StackAttackOptions.FIELD_WIDTH + 2 * StackAttackOptions.FIELD_OFFSET));
+        vOffsetX = (int)(vw - makeUncommentedMagic(vCellSize, StackAttackOptions.FIELD_WIDTH));
     }
     
     private int determineCellSize( final int vw, final int vh) {
         int
-          magicBasedOnWidth = (vw / (StackAttackOptions.FIELD_WIDTH + 2 * StackAttackOptions.FIELD_OFFSET)),
-          magicBasedOnHeight = (vh / (StackAttackOptions.FIELD_HEIGHT + 2 * StackAttackOptions.FIELD_OFFSET));
+          magicBasedOnWidth = makeUncommentedMagic(vw, StackAttackOptions.FIELD_WIDTH),
+          magicBasedOnHeight = makeUncommentedMagic(vh, StackAttackOptions.FIELD_HEIGHT);
         return Math.min(magicBasedOnWidth, magicBasedOnHeight);
+    }
+    
+    private int makeUncommentedMagic( final int base, final int magicSource ) {
+      return base / (magicSource + 2 * StackAttackOptions.FIELD_OFFSET);
     }
 
     /**
