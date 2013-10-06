@@ -92,14 +92,14 @@ public class StackAttackCoordinatesConverter {
         vOffsetX = (int)(vw - makeUncommentedMagic(vCellSize, StackAttackOptions.FIELD_WIDTH));
     }
     
-    private int determineCellSize( final int vw, final int vh) {
+    private int determineCellSize(final int vw, final int vh) {
         int
           magicBasedOnWidth = makeUncommentedMagic(vw, StackAttackOptions.FIELD_WIDTH),
           magicBasedOnHeight = makeUncommentedMagic(vh, StackAttackOptions.FIELD_HEIGHT);
         return Math.min(magicBasedOnWidth, magicBasedOnHeight);
     }
     
-    private int makeUncommentedMagic( final int base, final int magicSource ) {
+    private int makeUncommentedMagic(final int base, final int magicSource) {
       return base / (magicSource + 2 * StackAttackOptions.FIELD_OFFSET);
     }
 
@@ -125,7 +125,7 @@ public class StackAttackCoordinatesConverter {
       return screen2VirtualConvertSuit<VirtualCoordinate, ScreenCoordinate>(sc);
     }
     
-    private<A, B> A screen2VirtualConvertSuit( final B origin ) {
+    private<A, B> A screen2VirtualConvertSuit(final B origin) {
         if (w > h) {
             return new A(0, 0); /* ToDo */
         } else {
