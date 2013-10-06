@@ -13,7 +13,7 @@ public class DoubleUtils {
     }
 
     public static boolean zero(final double n) {
-        return (-EPS < n) && (n < EPS);
+        return !negative(n) && !positive(n);
     }
 
     public static boolean negative(final double n) {
@@ -45,14 +45,18 @@ public class DoubleUtils {
     }
 
     public static double round(final double n) {
-        double f = Math.floor(n);
-
-        if (Math.abs(f - n) < EPS) {
-            return f;
-        } else if (Math.abs(f + 1 - n) < EPS) {
-            return f + 1;
-        }
-
+        double rounded = roundForce(n);
+        if (Math.abs(rounded - n) < EPS)
+          return rounded;
+ 
         return n;
     }
+    
+    public static double roundForce(final double n) {
+        double f = Math.floor(n);
+
+        if (Math.abs(f - n) < EPS)
+          return f;
+        return f + 1;
+   }
 }
