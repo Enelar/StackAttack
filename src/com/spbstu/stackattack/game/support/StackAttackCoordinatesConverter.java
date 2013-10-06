@@ -87,12 +87,16 @@ public class StackAttackCoordinatesConverter {
         vw = Math.max(w, h);
         vh = Math.min(w, h);
 
-        vCellSize = Math.min(
-                (int)(vw / (StackAttackOptions.FIELD_WIDTH + 2 * StackAttackOptions.FIELD_OFFSET)),
-                (int)(vh / (StackAttackOptions.FIELD_HEIGHT + 2 * StackAttackOptions.FIELD_OFFSET))
-        );
+        vCellSize = determineCellSize(vw, vh);
 
         vOffsetX = (int)(vw - vCellSize * (StackAttackOptions.FIELD_WIDTH + 2 * StackAttackOptions.FIELD_OFFSET));
+    }
+    
+    private int determineCellSize( final int vw, final int vh) {
+        int
+          magicBasedOnWidth = (vw / (StackAttackOptions.FIELD_WIDTH + 2 * StackAttackOptions.FIELD_OFFSET)),
+          magicBasedOnHeight = (vh / (StackAttackOptions.FIELD_HEIGHT + 2 * StackAttackOptions.FIELD_OFFSET));
+        return Math.min(magicBasedOnWidth, magicBasedOnHeight);
     }
 
     /**
