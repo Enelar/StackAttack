@@ -6,6 +6,7 @@ package com.spbstu.stackattack.utils;
  * @author bsi
  */
 public class TimeUtils {
+    private static final long ticksInSecond = 1000;
     /**
      * Convert seconds to mills function.
      *
@@ -14,7 +15,7 @@ public class TimeUtils {
      * @return time in mills.
      */
     public static long secToMills(double sec) {
-        return (long)(1000 * sec);
+        return (long)(ticksInSecond * sec);
     }
 
     /**
@@ -25,6 +26,6 @@ public class TimeUtils {
      * @return time in seconds.
      */
     public static double millsToSec(long mills) {
-        return mills / 1000.0;
+        return (double)mills / ticksInSecond;
     }
 }
