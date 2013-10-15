@@ -1,13 +1,15 @@
 package com.spbstu.stackattack.game.drawer.test;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import com.spbstu.stackattack.game.data.Player;
 import com.spbstu.stackattack.game.data.StackAttackData;
-import com.spbstu.stackattack.game.data.StoreItem;
+import com.spbstu.stackattack.game.data.storeitem.StoreItem;
 import com.spbstu.stackattack.game.drawer.StackAttackDrawer;
-import com.spbstu.stackattack.game.support.StackAttackOptions;
+import com.spbstu.stackattack.game.support.SAGameBitmapLoader;
+import com.spbstu.stackattack.game.support.SAOptions;
 
 /**
  * Stack attack drawer implementation.
@@ -16,11 +18,6 @@ import com.spbstu.stackattack.game.support.StackAttackOptions;
  */
 public class StackAttackDrawerTest extends StackAttackDrawer {
     private Paint fieldPaint = new Paint();
-    private Paint playerPaint = new Paint();
-    //private Paint cranePaint = new Paint();
-    private Paint staticStoreItemPaint = new Paint();
-    private Paint fallingStoreItemPaint = new Paint();
-    private Paint movedStoreItemPaint = new Paint();
 
     /**
      * Class constructor.
@@ -33,14 +30,6 @@ public class StackAttackDrawerTest extends StackAttackDrawer {
         fieldPaint.setColor(Color.WHITE);
         fieldPaint.setStyle(Paint.Style.STROKE);
         fieldPaint.setStrokeWidth(1.0f);
-
-        playerPaint.setColor(Color.BLUE);
-
-        //cranePaint.setColor(Color.BLUE);
-
-        staticStoreItemPaint.setColor(Color.GREEN);
-        fallingStoreItemPaint.setColor(Color.RED);
-        movedStoreItemPaint.setColor(Color.YELLOW);
     }
 
     @Override
@@ -57,10 +46,13 @@ public class StackAttackDrawerTest extends StackAttackDrawer {
      * @param c canvas to draw into.
      */
     private void drawGameField(final Canvas c) {
-        drawRect(c, 0, 0, StackAttackOptions.FIELD_WIDTH, StackAttackOptions.FIELD_HEIGHT, fieldPaint);
+        drawBitmap(c, SAGameBitmapLoader.bitmap(SAGameBitmapLoader.BitmapId.BACKGROUND), -0.1, 0,
+                1.2 * SAOptions.FIELD_WIDTH, 1.2 * SAOptions.FIELD_HEIGHT);
 
-        for (int x = 0; x < StackAttackOptions.FIELD_WIDTH; x++) {
-            for (int y = 0; y < StackAttackOptions.FIELD_HEIGHT; y++) {
+        drawRect(c, 0, 0, SAOptions.FIELD_WIDTH, SAOptions.FIELD_HEIGHT, fieldPaint);
+
+        for (int x = 0; x < SAOptions.FIELD_WIDTH; x++) {
+            for (int y = 0; y < SAOptions.FIELD_HEIGHT; y++) {
                 drawRect(c, x, y, 1, 1, fieldPaint);
             }
         }
@@ -74,7 +66,7 @@ public class StackAttackDrawerTest extends StackAttackDrawer {
     private void drawPlayer(final Canvas c) {
         Player player = saData.getPlayer();
 
-        drawRect(c, player.x, player.y, 0.97, StackAttackOptions.PLAYER_HEIGHT - 0.03, playerPaint);
+        drawBitmap(c, SAGameBitmapLoader.bitmap(SAGameBitmapLoader.BitmapId.PLAYER), player.x, player.y, 1, 2);
     }
 
     /**
@@ -87,6 +79,7 @@ public class StackAttackDrawerTest extends StackAttackDrawer {
         Collection<Crane> cranes = saData.getCranes();
 
         for (final Crane crane : cranes) {
+
             drawRect(c, crane.x, crane.y - 0.06, 1.0, 0.14, cranePaint);
         }
 */
@@ -100,20 +93,33 @@ public class StackAttackDrawerTest extends StackAttackDrawer {
     private void drawStoreItems(final Canvas c) {
         synchronized (saData.getStaticStoreItems()) {
             for (final StoreItem storeItem : saData.getStaticStoreItems()) {
-                drawRect(c, storeItem.x, storeItem.y, 0.97, 0.97, staticStoreItemPaint);
+                drawBitmap(c, getBoxBitmap(storeItem.type), storeItem.x, storeItem.y, 1, 1);
             }
         }
 
         synchronized (saData.getFallingStoreItems()) {
             for (final StoreItem storeItem : saData.getFallingStoreItems()) {
-                drawRect(c, storeItem.x, storeItem.y, 0.97, 0.97, fallingStoreItemPaint);
+                drawBitmap(c, getBoxBitmap(storeItem.type), storeItem.x, storeItem.y, 1, 1);
             }
         }
 
-        synchronized (saData.getMovedStoreItems()) {
-            for (final StoreItem storeItem : saData.getMovedStoreItems()) {
-                drawRect(c, storeItem.x, storeItem.y, 0.97, 0.97, movedStoreItemPaint);
+        synchronized (saData.getMovingStoreItems()) {
+            for (final StoreItem storeItem : saData.getMovingStoreItems()) {
+                drawBitmap(c, getBoxBitmap(storeItem.type), storeItem.x, storeItem.y, 1, 1);
             }
         }
+    }
+
+    private Bitmap getBoxBitmap(final StoreItem.Type type) {
+        switch (type) {
+            case TYPE_1:
+                return SAGameBitmapLoader.bitmap(SAGameBitmapLoader.BitmapId.BOX_1);
+            case TYPE_2:
+                return SAGameBitmapLoader.bitmap(SAGameBitmapLoader.BitmapId.BOX_2);
+            case TYPE_3:
+                return SAGameBitmapLoader.bitmap(SAGameBitmapLoader.BitmapId.BOX_3);
+        }
+
+        throw new IllegalArgumentException();
     }
 }

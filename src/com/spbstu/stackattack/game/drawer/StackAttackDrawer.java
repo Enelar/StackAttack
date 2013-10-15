@@ -1,9 +1,13 @@
 package com.spbstu.stackattack.game.drawer;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import com.spbstu.stackattack.game.data.StackAttackData;
-import com.spbstu.stackattack.game.support.StackAttackCoordinatesConverter;
+import com.spbstu.stackattack.game.support.SAGameCoordinatesConverter;
+import com.spbstu.stackattack.support.coords.SACoordinatesConverter;
+import com.spbstu.stackattack.support.coords.SAScreenCoordinate;
+import com.spbstu.stackattack.support.coords.SAVirtualCoordinate;
 
 /**
  * Stack attack drawer representation class.
@@ -11,47 +15,33 @@ import com.spbstu.stackattack.game.support.StackAttackCoordinatesConverter;
  * @author bsi
  */
 public abstract class StackAttackDrawer {
+    private final SACoordinatesConverter coordinatesConverter = SACoordinatesConverter.instance();
+
     protected final StackAttackData saData;
 
-    protected final StackAttackCoordinatesConverter converter = StackAttackCoordinatesConverter.getInstance();
-
-    /**
-     * Class constructor.
-     *
-     * @param saData reference to a game data.
-     */
     protected StackAttackDrawer(final StackAttackData saData) {
         this.saData = saData;
     }
 
-    /**
-     * Draw stack attack game data function.
-     *
-     * @param c canvas to draw into.
-     */
     public abstract void draw(final Canvas c);
 
-    /**
-     * Draw rectangle function.
-     *
-     * @param c canvas to draw into.
-     * @param x x rectangle coordinate.
-     * @param y y rectangle coordinate.
-     * @param w rectangle widht.
-     * @param h rectangle height.
-     * @param p paint to draw.
-     */
     public void drawRect(final Canvas c, final double x, final double y, final double w, final double h, final Paint p) {
-        StackAttackCoordinatesConverter.VirtualCoordinate leftTopVC =
-                converter.fieldToVirtual(new StackAttackCoordinatesConverter.FieldCoordinate(x + w, y + h));
-        StackAttackCoordinatesConverter.VirtualCoordinate rightBottomVC =
-                converter.fieldToVirtual(new StackAttackCoordinatesConverter.FieldCoordinate(x, y));
+        SAVirtualCoordinate leftTopVC =
+                SAGameCoordinatesConverter.fieldToVirtual(new SAGameCoordinatesConverter.FieldCoordinate(x + w, y + h));
+        SAVirtualCoordinate rightBottomVC =
+                SAGameCoordinatesConverter.fieldToVirtual(new SAGameCoordinatesConverter.FieldCoordinate(x, y));
 
-        StackAttackCoordinatesConverter.ScreenCoordinate leftTopSC =
-                converter.virtualToScreen(leftTopVC);
-        StackAttackCoordinatesConverter.ScreenCoordinate rightBottomSC =
-                converter.virtualToScreen(rightBottomVC);
+        SAScreenCoordinate leftTopSC = coordinatesConverter.virtualToScreen(leftTopVC);
+        SAScreenCoordinate rightBottomSC = coordinatesConverter.virtualToScreen(rightBottomVC);
 
         c.drawRect(leftTopSC.x, leftTopSC.y, rightBottomSC.x, rightBottomSC.y, p);
+    }
+
+    public void drawBitmap(final Canvas c, final Bitmap bm, final double x, final double y, final double w, final double h) {
+        SAVirtualCoordinate leftTopVC =
+                SAGameCoordinatesConverter.fieldToVirtual(new SAGameCoordinatesConverter.FieldCoordinate(x + w, y + h));
+        SAScreenCoordinate leftTopSC = coordinatesConverter.virtualToScreen(leftTopVC);
+
+        c.drawBitmap(bm, leftTopSC.x, leftTopSC.y, null);
     }
 }

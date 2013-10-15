@@ -4,11 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import com.spbstu.stackattack.game.controls.StackAttackControls;
-import com.spbstu.stackattack.game.controls.bypress.StackAttackControls1;
+import com.spbstu.stackattack.game.controls.StackAttackControls1;
 import com.spbstu.stackattack.game.data.StackAttackData;
 import com.spbstu.stackattack.game.drawer.StackAttackDrawer;
 import com.spbstu.stackattack.game.drawer.test.StackAttackDrawerTest;
-import com.spbstu.stackattack.game.support.StackAttackCoordinatesConverter;
+import com.spbstu.stackattack.game.support.SAGameBitmapLoader;
+import com.spbstu.stackattack.game.support.SAGameCoordinatesConverter;
 
 /**
  * Stack attack game representation class.
@@ -20,10 +21,10 @@ public class StackAttackGame {
     private StackAttackDrawer saDrawer = new StackAttackDrawerTest(saData);
     private StackAttackControls saControls;
 
-    private StackAttackCoordinatesConverter converter = StackAttackCoordinatesConverter.getInstance();
-
     public StackAttackGame(final Context context) {
         saControls = new StackAttackControls1(context, saData);
+
+        SAGameBitmapLoader.set(context.getResources());
     }
 
     /**
@@ -42,7 +43,8 @@ public class StackAttackGame {
      * @param h new screen height.
      */
     public void resize(final int w, final int h) {
-        converter.resize(w, h);
+        SAGameCoordinatesConverter.resize();
+        SAGameBitmapLoader.resize(w, h);
     }
 
     /**
