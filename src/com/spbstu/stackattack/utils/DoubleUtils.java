@@ -6,7 +6,7 @@ package com.spbstu.stackattack.utils;
  * @author bsi
  */
 public class DoubleUtils {
-    private static final double EPS = 0.001;
+    private static final double EPS = 0.01;
 
     public static boolean positive(final double n) {
         return n >= EPS;

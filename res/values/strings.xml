@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="app_name">StackAttack</string>
+
+    <string name="loading_text">Loading</string>
+
+    <string name="new_game_button_text">New Game</string>
+    <string name="continue_game_button_text">Continue</string>
+    <string name="highscores_button_text">Highscores</string>
+    <string name="exit_button_text">Exit</string>
 </resources>

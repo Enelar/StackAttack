@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="loading_text">Загрузка</string>
+
+    <string name="new_game_button_text">Новая игра</string>
+    <string name="continue_game_button_text">Продолжить</string>
+    <string name="highscores_button_text">Рекорды</string>
+    <string name="exit_button_text">Выйти</string>
+</resources>
